@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val manual_btn: MaterialButton = findViewById(R.id.manual_btn)
-        manual_btn.addTextChangedListener {
+        manual_btn.setOnClickListener {
             adapter.notifyDataSetChanged()
         }
 
