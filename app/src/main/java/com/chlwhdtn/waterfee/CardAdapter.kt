@@ -1,6 +1,7 @@
 package com.chlwhdtn.waterfee
 
 import android.content.Context
+import android.content.DialogInterface
 import android.net.wifi.hotspot2.pps.HomeSp
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.DialogCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 
@@ -38,6 +41,22 @@ class CardAdapter(val list: ArrayList<House>, val context: Context) : RecyclerVi
                 notifyDataSetChanged()
             }
         } else if(holder is CardAdapter.ViewHolder) {
+            holder.itemView.setOnLongClickListener {
+                val builder = AlertDialog.Builder(it.context)
+                builder.setMessage("모든 층을 삭제할까요?")
+                    .setPositiveButton("네",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            list.clear()
+                            MainActivity.prefs.list = list
+                            notifyDataSetChanged()
+                        })
+                    .setNegativeButton("취소",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            // User cancelled the dialog
+                        })
+                builder.create().show()
+                true
+            }
             holder.house_name.text = list[position-1].house_name
             holder.people_count.setText(list[position-1].people_count.toString())
             holder.house_price.text = String.format("%,d 원", list[position-1].house_price)
